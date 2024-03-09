@@ -1,6 +1,4 @@
-const mongo = require("mongodb");
-
-const crypto = require("crypto");
+const sha1 = require("sha1");
 const dbClient = require("../utils/db");
 
 class UsersController {
@@ -21,13 +19,12 @@ class UsersController {
     if (result.length > 0) {
       res.status(400).json({ error: "Already exist" });
     }
-    const hashed = crypto.createHash("sha1").update(password).digest("hex");
+    const hashed = sha1(password);
     // console.log(hashed);
-    const id = new mongo.ObjectId();
-    const data = { email, password: hashed, id };
+    const data = { email, password: hashed };
     const pushed = await collection.insertOne(data);
     // console.log(pushed);
-    res.status(201).json({ id, email });
+    res.status(201).json({ id: pushed.id, email });
   }
 }
 
