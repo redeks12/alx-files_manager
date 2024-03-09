@@ -3,28 +3,22 @@ const dbClient = require("../utils/db");
 
 class UsersController {
   static async postNew(req, res) {
-    // console.log(req.body);
     const { email, password } = req.body;
-    // console.log(email, password);
-    // res.status(200).json({ error: "Missing email" });
-    //     console.log(req.body);
     if (!email) {
-      res.status(400).json({ error: "Missing email" });
+      return res.status(400).json({ error: "Missing email" });
     }
     if (!password) {
-      res.status(400).json({ error: "Missing password" });
+      return res.status(400).json({ error: "Missing password" });
     }
     const collection = dbClient.client.db().collection("users");
-    const result = await collection.find({ email }).toArray();
-    if (result.length > 0) {
-      res.status(400).json({ error: "Already exist" });
+    const result = await collection.findOne({ email });
+    if (result) {
+      return res.status(400).json({ error: "Already exist" });
     }
     const hashed = sha1(password);
-    // console.log(hashed);
     const data = { email, password: hashed };
     const pushed = await collection.insertOne(data);
-    // console.log(pushed);
-    res.status(201).json({ id: pushed.id, email });
+    return res.status(201).json({ id: pushed.ops[0]._id, email });
   }
 }
 
