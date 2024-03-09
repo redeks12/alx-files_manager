@@ -22,11 +22,11 @@ class UsersController {
       res.status(400).json({ error: "Already exist" });
     }
     const hashed = crypto.createHash("sha1").update(password).digest("hex");
-    console.log(hashed);
+    // console.log(hashed);
     const id = new mongo.ObjectId();
     const data = { email, password: hashed, id };
     const pushed = await collection.insertOne(data);
-    console.log(pushed);
+    // console.log(pushed);
     res.status(201).json({ id, email });
   }
 }
