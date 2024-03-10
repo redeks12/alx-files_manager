@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { ObjectId } = require("mongodb");
 const { v4 } = require("uuid");
 const dbClient = require("../utils/db");
 const redisClient = require("../utils/redis");
@@ -37,7 +38,7 @@ class FilesController {
       isPublic = false;
     }
     if (parentId) {
-      const parentFile = await dbClient.getFile(parentId);
+      const parentFile = await dbClient.getFile({ _id: ObjectId(parentId) });
       if (!parentFile) {
         return Helpers.cantFind(res, { error: "Parent not found" });
       }
@@ -61,7 +62,6 @@ class FilesController {
     // const bb = await dbClient.getFile({ name, type });
     const uuid1 = v4();
     const fullPath = `${folderPath}/${uuid1}`;
-
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
     }
