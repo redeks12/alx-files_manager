@@ -29,6 +29,40 @@ class DBClient {
   async nbFiles() {
     return this.client.db().collection("files").countDocuments();
   }
+
+  async getUser(dict) {
+    const collection = this.client.db().collection("users");
+    const result = await collection.findOne(dict);
+
+    if (result) {
+      return result;
+    }
+    return false;
+  }
+
+  async getFile(dict) {
+    const collection = this.client.db().collection("files");
+    const result = await collection.findOne(dict);
+
+    if (result) {
+      return result;
+    }
+    return false;
+  }
+
+  getToken(req) {
+    const token = req.headers["x-token"];
+    if (!token) {
+      return false;
+    }
+    return `auth_${token}`;
+  }
+
+  async saveFile(data) {
+    const collection = this.client.db().collection("files");
+    const pushed = await collection.insertOne(data);
+    return pushed;
+  }
 }
 
 const dbClient = new DBClient();

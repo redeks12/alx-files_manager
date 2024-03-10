@@ -29,6 +29,14 @@ class RedisClient {
   async del(key) {
     util.promisify(this.client.DEL).bind(this.client)(key);
   }
+
+  async getId(token) {
+    const id = await this.get(`auth_${token}`);
+    if (id) {
+      return id;
+    }
+    return false;
+  }
 }
 
 const redisClient = new RedisClient();

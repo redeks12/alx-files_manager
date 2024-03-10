@@ -23,20 +23,30 @@ res = requests.get(
 )
 print(res.json())
 
-res = requests.get(
-    "http://localhost:5000/disconnect",
+res = requests.post(
+    "http://localhost:5000/files",
     headers={
         "X-Token": red.get("token"),
     },
-)
-print(
-    res.status_code,
-)
-# # # res.raise_for_status()
-res = requests.get(
-    "http://localhost:5000/users/me",
-    headers={
-        "X-Token": red.get("token"),
-    },
+    json={"name": "mainfile3", "type": "file", "data": "SGVsbG8gV2Vic3RhY2shCg=="},
 )
 print(res.json())
+
+# res = requests.post(
+#     "http://localhost:5000/files",
+#     headers={
+#         "X-Token": red.get("token"),
+#     },
+#     json={},
+# )
+# print(
+#     res.status_code,
+# )
+# # # res.raise_for_status()
+# res = requests.get(
+#     "http://localhost:5000/users/me",
+#     headers={
+#         "X-Token": red.get("token"),
+#     },
+# )
+# print(res.json())
