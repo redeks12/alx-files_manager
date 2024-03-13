@@ -34,28 +34,16 @@ kk = res.json()
 print(kk)
 print("//////////////")
 
-import base64
+res = requests.get(
+    "http://localhost:5000/files?parentId=65edebf78a4e3427c4b42f3b",
+    headers={"X-token": "80410631-a20a-409d-9eb4-36cde8914eb9"},
+)
 
-# import requests
-import sys
+print(res.json())
 
-file_path = sys.argv[1]
-file_name = file_path.split("/")[-1]
+res = requests.get(
+    "http://localhost:5000/files/65ee013bae63fb22dc43558d",
+    headers={"X-token": "80410631-a20a-409d-9eb4-36cde8914eb9"},
+)
 
-file_encoded = None
-with open(file_path, "rb") as image_file:
-    file_encoded = base64.b64encode(image_file.read()).decode("utf-8")
-    # print(file_encoded)
-
-r_json = {
-    "name": file_name,
-    "type": "image",
-    "isPublic": True,
-    "data": file_encoded,
-    "parentId": kk.get("_id"),
-}
-r_headers = {"X-Token": red.get("token")}
-
-r = requests.post("http://localhost:5000/files", json=r_json, headers=r_headers)
-print(r.status_code)
-print(r.json())
+print(res.json())
